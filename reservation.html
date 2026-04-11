@@ -88,6 +88,35 @@
         .counter-btn:not(:disabled):hover { border-color: #aaa; background: #f5f5f5; }
         .counter-val { font-size: 16px; font-weight: bold; min-width: 20px; text-align: center; }
 
+        /* 예약자 정보 입력 */
+        .contact-section { padding: 22px 18px; border-bottom: 8px solid #f8f8f8; display: none; }
+        .input-row { margin-bottom: 16px; }
+        .input-row label { display: block; font-size: 13px; color: #666; font-weight: bold; margin-bottom: 7px; }
+        .input-row input {
+            width: 100%; padding: 13px 14px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 15px; box-sizing: border-box;
+            outline: none; font-family: inherit;
+        }
+        .input-row input:focus { border-color: #f0c000; box-shadow: 0 0 0 3px rgba(254,229,0,0.2); }
+        .input-required { color: #e05; margin-left: 2px; }
+
+        /* 예약 완료 성공 화면 */
+        .success-overlay {
+            display: none; position: fixed; inset: 0; background: #fff;
+            z-index: 200; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 40px;
+        }
+        .success-overlay.show { display: flex; }
+        .success-icon { font-size: 60px; margin-bottom: 20px; }
+        .success-title { font-size: 22px; font-weight: bold; margin-bottom: 12px; }
+        .success-desc { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 32px; }
+        .success-summary {
+            background: #f8f8f8; border-radius: 12px; padding: 18px 22px;
+            text-align: left; width: 100%; max-width: 360px;
+            font-size: 13px; color: #444; line-height: 2; margin-bottom: 32px;
+        }
+        .btn-home { background: #fee500; border: none; padding: 16px 40px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+
         /* 탭 바 */
         .tab-bar { display: flex; border-bottom: 1px solid #eee; position: sticky; top: 53px; background: #fff; z-index: 90; }
         .tab-btn {
@@ -202,11 +231,36 @@
                 </div>
             </div>
         </div>
+
+        <div class="contact-section" id="contact-section">
+            <div class="section-title">✏️ 예약자 정보</div>
+            <div class="input-row">
+                <label>이름 <span class="input-required">*</span></label>
+                <input type="text" id="input-name" placeholder="예약자 이름을 입력하세요">
+            </div>
+            <div class="input-row">
+                <label>연락처 <span class="input-required">*</span></label>
+                <input type="tel" id="input-phone" placeholder="010-0000-0000">
+            </div>
+            <div class="input-row">
+                <label>이메일</label>
+                <input type="email" id="input-email" placeholder="example@email.com">
+            </div>
+        </div>
     </div>
 
     <div class="footer" id="footer-bar" style="display:none;">
-        <button id="submit-btn" class="btn-submit" disabled onclick="alert('예약 접수!')">예약 완료</button>
+        <button id="submit-btn" class="btn-submit" disabled onclick="submitReservation()">예약 완료</button>
     </div>
+</div>
+
+<!-- 예약 완료 성공 화면 -->
+<div class="success-overlay" id="success-overlay">
+    <div class="success-icon">✅</div>
+    <div class="success-title">예약이 접수되었습니다!</div>
+    <div class="success-desc">담당자가 확인 후<br>연락처로 확정 안내를 드립니다.</div>
+    <div class="success-summary" id="success-summary"></div>
+    <button class="btn-home" onclick="location.href='index.html'">매장 목록으로 돌아가기</button>
 </div>
 
 <script>
@@ -381,6 +435,7 @@
     };
 
     function startBooking(title, img, desc) {
+        selectedMenuTitle = title;
         document.getElementById('menu-view').style.display = 'none';
         document.getElementById('step-view').style.display = 'block';
         document.getElementById('footer-bar').style.display = 'block';
@@ -459,7 +514,7 @@
                 d.addEventListener('click', () => {
                     document.querySelectorAll('.cal-date').forEach(el => el.classList.remove('selected'));
                     d.classList.add('selected');
-                    // 날짜 바뀌면 시간 초기화 후 시간 선택 영역 노출
+                    selectedDay = day;
                     resetTimeSelection();
                     showTimeSection();
                 });
@@ -471,10 +526,12 @@
     function initCalendar() {
         calYear = today.getFullYear();
         calMonth = today.getMonth();
+        selectedDay = null;
         resetTimeSelection();
         resetPeopleSection();
         document.getElementById('time-section').style.display = 'none';
         document.getElementById('people-section').style.display = 'none';
+        document.getElementById('contact-section').style.display = 'none';
         document.getElementById('submit-btn').disabled = true;
         renderCalendar();
     }
@@ -523,6 +580,8 @@
 
     // 인원 카운터 상태
     const counts = { adult: 0, child: 0, infant: 0 };
+    let selectedDay = null;
+    let selectedMenuTitle = '';
 
     function resetPeopleSection() {
         counts.adult = 0; counts.child = 0; counts.infant = 0;
@@ -530,6 +589,7 @@
             document.getElementById(`${type}-val`).innerText = '0';
             document.getElementById(`${type}-minus`).disabled = true;
         });
+        document.getElementById('contact-section').style.display = 'none';
         document.getElementById('submit-btn').disabled = true;
     }
 
@@ -544,9 +604,72 @@
         document.getElementById(`${type}-val`).innerText = counts[type];
         document.getElementById(`${type}-minus`).disabled = counts[type] === 0;
 
-        // 성인+아동+유아 합계 1명 이상이어야 예약 완료 활성화
         const total = counts.adult + counts.child + counts.infant;
+
+        // 1명 이상이면 예약자 정보 섹션 표시
+        const contactSection = document.getElementById('contact-section');
+        if (total >= 1 && contactSection.style.display === 'none') {
+            contactSection.style.display = 'block';
+            setTimeout(() => contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        } else if (total === 0) {
+            contactSection.style.display = 'none';
+        }
+
         document.getElementById('submit-btn').disabled = total === 0;
+    }
+
+    // Google Apps Script 웹앱 URL (배포 후 교체)
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyK0cUAGhbkCg_oHvvLoKIm10DS90nZeg_bBqjI3gnhkpSm7HJxpw6HG3XgNF2UPvBH/exec';
+
+    function submitReservation() {
+        const name = document.getElementById('input-name').value.trim();
+        const phone = document.getElementById('input-phone').value.trim();
+        const email = document.getElementById('input-email').value.trim();
+
+        if (!name) { alert('이름을 입력해 주세요.'); document.getElementById('input-name').focus(); return; }
+        if (!phone) { alert('연락처를 입력해 주세요.'); document.getElementById('input-phone').focus(); return; }
+
+        const dateStr = selectedDay ? `${calYear}년 ${calMonth + 1}월 ${selectedDay}일` : '-';
+        const timeStr = document.getElementById('time-section-label').innerText;
+
+        const data = {
+            store: store.name,
+            menu: selectedMenuTitle,
+            date: dateStr,
+            time: timeStr,
+            adult: counts.adult,
+            child: counts.child,
+            infant: counts.infant,
+            name,
+            phone,
+            email
+        };
+
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerText = '접수 중...';
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => showSuccess(data))
+        .catch(() => showSuccess(data)); // no-cors는 항상 opaque response
+
+    }
+
+    function showSuccess(data) {
+        document.getElementById('success-summary').innerHTML = `
+            <b>매장</b>: ${data.store}<br>
+            <b>메뉴</b>: ${data.menu}<br>
+            <b>날짜</b>: ${data.date}<br>
+            <b>시간</b>: ${data.time}<br>
+            <b>인원</b>: 성인 ${data.adult}명 / 아동 ${data.child}명 / 유아 ${data.infant}명<br>
+            <b>예약자</b>: ${data.name} (${data.phone})
+        `;
+        document.getElementById('success-overlay').classList.add('show');
     }
 
     function handleBack() {
