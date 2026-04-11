@@ -235,8 +235,10 @@
         <div class="contact-section" id="contact-section">
             <div class="section-title">✏️ 예약자 정보</div>
             <div class="input-row">
-                <label>이름 <span class="input-required">*</span></label>
-                <input type="text" id="input-name" placeholder="예약자 이름을 입력하세요">
+                <label>영문 성함 <span class="input-required">*</span></label>
+                <input type="text" id="input-name" placeholder="e.g. HONG GILDONG" autocomplete="off"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '').toUpperCase()">
+                <small style="color:#aaa; font-size:11px; margin-top:5px; display:block;">영문 대문자로 자동 변환됩니다</small>
             </div>
             <div class="input-row">
                 <label>연락처 <span class="input-required">*</span></label>
@@ -626,7 +628,8 @@
         const phone = document.getElementById('input-phone').value.trim();
         const email = document.getElementById('input-email').value.trim();
 
-        if (!name) { alert('이름을 입력해 주세요.'); document.getElementById('input-name').focus(); return; }
+        if (!name) { alert('영문 성함을 입력해 주세요.'); document.getElementById('input-name').focus(); return; }
+        if (!/^[a-zA-Z\s]+$/.test(name)) { alert('성함은 영문으로만 입력해 주세요.'); document.getElementById('input-name').focus(); return; }
         if (!phone) { alert('연락처를 입력해 주세요.'); document.getElementById('input-phone').focus(); return; }
 
         const dateStr = selectedDay ? `${calYear}년 ${calMonth + 1}월 ${selectedDay}일` : '-';
