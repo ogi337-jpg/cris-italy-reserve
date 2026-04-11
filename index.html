@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>매장 선택</title>
+    <style>
+        /* 기본 배경색 및 폰트 설정 */
+        body { margin: 0; background: #f2f2f2; font-family: -apple-system, sans-serif; color: #191919; }
+        
+        /* 전체 컨테이너: PC에서도 너무 퍼지지 않게 중앙 500px 고정 */
+        .container { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: #fff; 
+            min-height: 100vh; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .header { 
+            padding: 25px 20px; 
+            text-align: center; 
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .header h1 { margin: 0; font-size: 18px; font-weight: bold; }
+
+        /* 매장 리스트 영역 */
+        .store-list { padding: 20px 16px; }
+
+        /* 매장 카드 스타일 */
+        .store-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            background: #fff;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* 클릭 피드백 효과 */
+        .store-item:active { background-color: #f9f9f9; transform: scale(0.98); }
+        .store-item:hover { border-color: #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        /* 매장 로고 이미지 */
+        .store-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #f0f0f0;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .store-info { flex: 1; }
+        .store-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; display: block; }
+        .store-desc { font-size: 13px; color: #888; line-height: 1.4; }
+
+        /* 오른쪽 화살표 아이콘 */
+        .arrow-icon {
+            color: #ccc;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        /* PC 화면 대응을 위한 미디어 쿼리 (선택 사항) */
+        @media (min-width: 501px) {
+            body { background-color: #e5e5e5; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>방문하실 매장을 선택하세요</h1>
+    </div>
+
+    <div class="store-list" id="store-list-container">
+        </div>
+</div>
+
+<script>
+    // 매장 데이터 구성
+    const stores = [
+        { id: 'dal_duomo', name: '달오스떼 두오모점', desc: '피렌체 두오모 성당 인근 | 티본 스테이크 전문', img: '달오스떼.png' },
+        { id: 'dal_station', name: '달오스떼 역앞점', desc: '산타마리아 노벨라역 도보 3분 | 본점', img: '달오스떼.png' },
+        { id: 'nuti', name: '누띠 (Nuti)', desc: '100년 전통의 레스토랑 | 현지인 맛집', img: '누띠.jpg' },
+        { id: 'paoli', name: '파울리 (Paoli)', desc: '중세풍 인테리어 | 품격 있는 식사', img: '파울리.png' },
+        { id: 'golden_view', name: '골든뷰 (Golden View)', desc: '베키오 다리 전망 | 로맨틱 다이닝', img: '골든뷰.png' }
+    ];
+
+    const container = document.getElementById('store-list-container');
+
+    // 리스트 생성 로직
+    stores.forEach(store => {
+        const item = document.createElement('a');
+        item.href = `reservation.html?id=${store.id}`;
+        item.className = 'store-item';
+        
+        item.innerHTML = `
+            <img src="${store.img}" alt="${store.name}" class="store-logo">
+            <div class="store-info">
+                <span class="store-name">${store.name}</span>
+                <span class="store-desc">${store.desc}</span>
+            </div>
+            <div class="arrow-icon">›</div>
+        `;
+        
+        container.appendChild(item);
+    });
+</script>
+
+</body>
+</html>
