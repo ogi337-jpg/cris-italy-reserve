@@ -26,124 +26,132 @@
             padding: 28px 20px 20px;
             border-bottom: 8px solid #f8f8f8;
         }
-        .search-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-        .search-desc {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 22px;
-            line-height: 1.5;
-        }
-        .input-wrap {
-            display: flex;
-            gap: 10px;
-        }
+        .search-title { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+        .search-desc { font-size: 13px; color: #888; margin-bottom: 22px; line-height: 1.5; }
+        .input-wrap { display: flex; gap: 10px; }
         .phone-input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 1.5px solid #ddd;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-            font-family: inherit;
-            box-sizing: border-box;
+            flex: 1; padding: 14px 16px;
+            border: 1.5px solid #ddd; border-radius: 10px;
+            font-size: 15px; outline: none; font-family: inherit; box-sizing: border-box;
         }
         .phone-input:focus { border-color: #f0c000; box-shadow: 0 0 0 3px rgba(254,229,0,0.2); }
         .btn-search {
-            background: #fee500;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 15px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.15s;
+            background: #fee500; border: none; padding: 14px 20px;
+            border-radius: 10px; font-weight: bold; font-size: 15px;
+            cursor: pointer; white-space: nowrap; transition: background 0.15s;
         }
         .btn-search:active { background: #f0d800; }
         .btn-search:disabled { background: #f2f2f2; color: #ccc; cursor: default; }
 
         /* 로딩 */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 50px 20px;
-            color: #888;
-            font-size: 14px;
-        }
+        .loading { display: none; text-align: center; padding: 50px 20px; color: #888; font-size: 14px; }
         .spinner {
             width: 36px; height: 36px;
-            border: 3px solid #eee;
-            border-top-color: #fee500;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            border: 3px solid #eee; border-top-color: #fee500;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
             margin: 0 auto 14px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* 결과 없음 */
-        .no-result {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-            color: #bbb;
-        }
+        .no-result { display: none; text-align: center; padding: 60px 20px; color: #bbb; }
         .no-result-icon { font-size: 48px; margin-bottom: 14px; }
         .no-result-text { font-size: 14px; line-height: 1.7; }
 
         /* 결과 목록 */
         .result-section { display: none; padding: 20px 18px; }
-        .result-count {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 16px;
-        }
+        .result-count { font-size: 13px; color: #888; margin-bottom: 16px; }
         .result-count b { color: #191919; }
 
         /* 예약 카드 */
         .reservation-card {
-            border: 1.5px solid #eee;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 14px;
-            background: #fff;
+            border: 1.5px solid #eee; border-radius: 14px;
+            padding: 20px; margin-bottom: 14px; background: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            transition: opacity 0.3s;
+        }
+        .reservation-card.cancelled {
+            background: #fafafa; border-color: #eee; opacity: 0.7;
         }
         .card-header {
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 12px;
+            margin-bottom: 14px; padding-bottom: 12px;
             border-bottom: 1px solid #f2f2f2;
         }
         .card-store { font-size: 16px; font-weight: bold; }
         .card-badge {
-            font-size: 11px;
-            font-weight: bold;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: #fff7cc;
-            color: #b89400;
+            font-size: 11px; font-weight: bold;
+            padding: 4px 10px; border-radius: 20px;
         }
+        .card-badge.active { background: #fff7cc; color: #b89400; }
+        .card-badge.cancelled { background: #ffe5e5; color: #cc3333; }
+
         .card-row {
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-            margin-bottom: 9px;
-            font-size: 14px;
+            display: flex; gap: 8px; align-items: flex-start;
+            margin-bottom: 9px; font-size: 14px;
         }
         .card-row:last-child { margin-bottom: 0; }
         .card-icon { font-size: 15px; flex-shrink: 0; width: 20px; }
         .card-label { color: #aaa; font-size: 12px; flex-shrink: 0; width: 40px; margin-top: 1px; }
         .card-value { color: #333; line-height: 1.4; flex: 1; }
 
-        @media (min-width: 501px) {
-            body { background-color: #e5e5e5; }
+        /* 취소 버튼 */
+        .card-footer { margin-top: 16px; padding-top: 14px; border-top: 1px solid #f2f2f2; }
+        .btn-cancel {
+            width: 100%; padding: 12px; border: 1.5px solid #ffbbbb;
+            border-radius: 10px; background: #fff; color: #cc3333;
+            font-size: 14px; font-weight: bold; cursor: pointer;
+            transition: all 0.15s;
         }
+        .btn-cancel:hover { background: #fff5f5; }
+        .btn-cancel:disabled { border-color: #eee; color: #ccc; cursor: default; background: #fafafa; }
+
+        /* 취소 완료 텍스트 */
+        .cancel-done-text {
+            text-align: center; font-size: 13px; color: #cc3333;
+            padding: 10px 0; font-weight: bold;
+        }
+
+        /* 모달 오버레이 */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45); z-index: 300;
+            align-items: flex-end; justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+
+        .modal-sheet {
+            width: 100%; max-width: 500px;
+            background: #fff; border-radius: 20px 20px 0 0;
+            padding: 28px 24px 36px; box-sizing: border-box;
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .modal-icon { font-size: 44px; text-align: center; margin-bottom: 14px; }
+        .modal-title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 8px; }
+        .modal-desc { font-size: 13px; color: #888; text-align: center; line-height: 1.6; margin-bottom: 22px; }
+        .modal-info {
+            background: #f8f8f8; border-radius: 10px; padding: 14px 16px;
+            font-size: 13px; color: #444; line-height: 2; margin-bottom: 24px;
+        }
+        .modal-btns { display: flex; gap: 10px; }
+        .btn-modal-cancel {
+            flex: 1; padding: 15px; border: 1.5px solid #ddd;
+            border-radius: 12px; background: #fff; font-size: 15px;
+            font-weight: bold; cursor: pointer; color: #555;
+        }
+        .btn-modal-confirm {
+            flex: 1; padding: 15px; border: none;
+            border-radius: 12px; background: #ff4444; color: #fff;
+            font-size: 15px; font-weight: bold; cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-modal-confirm:hover { background: #e03333; }
+        .btn-modal-confirm:disabled { background: #f2f2f2; color: #ccc; cursor: default; }
+
+        @media (min-width: 501px) { body { background-color: #e5e5e5; } }
     </style>
 </head>
 <body>
@@ -187,8 +195,24 @@
     </div>
 </div>
 
+<!-- 취소 확인 모달 -->
+<div class="modal-overlay" id="cancel-modal">
+    <div class="modal-sheet">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">예약을 취소하시겠습니까?</div>
+        <div class="modal-desc">취소 후에는 되돌릴 수 없습니다.<br>재예약이 필요하신 경우 다시 예약해 주세요.</div>
+        <div class="modal-info" id="modal-info"></div>
+        <div class="modal-btns">
+            <button class="btn-modal-cancel" onclick="closeModal()">돌아가기</button>
+            <button class="btn-modal-confirm" id="btn-modal-confirm" onclick="confirmCancel()">예약 취소</button>
+        </div>
+    </div>
+</div>
+
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrtrUS4bhp_p9hsEegXwrI68x7ZvShFDVF8eRK_bCanxp9s1dCCUcPwbOJP1A4YlKV/exec';
+
+    let pendingCancelData = null; // 취소 대기 중인 예약 정보
 
     function searchReservation() {
         const phoneRaw = document.getElementById('phone-input').value.trim();
@@ -199,7 +223,6 @@
             return;
         }
 
-        // UI 상태 초기화
         document.getElementById('loading').style.display = 'block';
         document.getElementById('no-result').style.display = 'none';
         document.getElementById('result-section').style.display = 'none';
@@ -222,18 +245,17 @@
                 if (results.length === 0) {
                     document.getElementById('no-result').style.display = 'block';
                 } else {
-                    showResults(results);
+                    showResults(results, phone);
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('btn-search').disabled = false;
                 alert('서버 연결에 실패했습니다.\n잠시 후 다시 시도해 주세요.');
-                console.error(err);
             });
     }
 
-    function showResults(results) {
+    function showResults(results, phone) {
         const section = document.getElementById('result-section');
         const list = document.getElementById('result-list');
         const countEl = document.getElementById('result-count');
@@ -241,10 +263,11 @@
         countEl.innerHTML = `총 <b>${results.length}건</b>의 예약이 확인되었습니다.`;
         list.innerHTML = '';
 
-        results.forEach(r => {
+        results.forEach((r, idx) => {
             const adult = r.adult || r['성인'] || 0;
             const child = r.child || r['아동'] || 0;
             const infant = r.infant || r['유아'] || 0;
+            const isCancelled = String(r.status || r['상태'] || '').includes('취소');
 
             const peopleStr = [
                 adult > 0 ? `성인 ${adult}명` : '',
@@ -253,11 +276,14 @@
             ].filter(Boolean).join(' / ') || '-';
 
             const card = document.createElement('div');
-            card.className = 'reservation-card';
+            card.className = 'reservation-card' + (isCancelled ? ' cancelled' : '');
+            card.id = `card-${idx}`;
             card.innerHTML = `
                 <div class="card-header">
                     <div class="card-store">${r.store || r['매장'] || '-'}</div>
-                    <div class="card-badge">접수완료</div>
+                    <div class="card-badge ${isCancelled ? 'cancelled' : 'active'}">
+                        ${isCancelled ? '취소됨' : '접수완료'}
+                    </div>
                 </div>
                 <div class="card-row">
                     <span class="card-icon">🎁</span>
@@ -284,12 +310,113 @@
                     <span class="card-label">예약자</span>
                     <span class="card-value">${r.name || r['예약자'] || '-'}</span>
                 </div>
+                <div class="card-footer" id="footer-${idx}">
+                    ${isCancelled
+                        ? '<div class="cancel-done-text">❌ 취소된 예약입니다</div>'
+                        : `<button class="btn-cancel" onclick="openCancelModal(${idx})">예약 취소 요청</button>`
+                    }
+                </div>
             `;
+
+            // 카드에 원본 데이터 저장
+            card.dataset.rowIndex = r._rowIndex || '';
+            card.dataset.phone = phone;
+            card.dataset.store = r.store || r['매장'] || '';
+            card.dataset.date = r.date || r['날짜'] || '';
+            card.dataset.time = r.time || r['시간'] || '';
+            card.dataset.menu = r.menu || r['메뉴'] || '';
+            card.dataset.name = r.name || r['예약자'] || '';
+            card.dataset.email = r.email || r['이메일'] || '';
+
             list.appendChild(card);
         });
 
         section.style.display = 'block';
     }
+
+    function openCancelModal(idx) {
+        const card = document.getElementById(`card-${idx}`);
+        pendingCancelData = {
+            idx,
+            rowIndex: card.dataset.rowIndex,
+            phone: card.dataset.phone,
+            store: card.dataset.store,
+            date: card.dataset.date,
+            time: card.dataset.time,
+            menu: card.dataset.menu,
+            name: card.dataset.name,
+            email: card.dataset.email
+        };
+
+        document.getElementById('modal-info').innerHTML =
+            `<b>매장</b>: ${pendingCancelData.store}<br>
+             <b>메뉴</b>: ${pendingCancelData.menu}<br>
+             <b>날짜</b>: ${pendingCancelData.date}<br>
+             <b>시간</b>: ${pendingCancelData.time}`;
+
+        document.getElementById('btn-modal-confirm').disabled = false;
+        document.getElementById('btn-modal-confirm').innerText = '예약 취소';
+        document.getElementById('cancel-modal').classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('cancel-modal').classList.remove('show');
+        pendingCancelData = null;
+    }
+
+    function confirmCancel() {
+        if (!pendingCancelData) return;
+
+        const confirmBtn = document.getElementById('btn-modal-confirm');
+        confirmBtn.disabled = true;
+        confirmBtn.innerText = '취소 처리 중...';
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'cancel',
+                rowIndex: pendingCancelData.rowIndex,
+                phone: pendingCancelData.phone,
+                store: pendingCancelData.store,
+                date: pendingCancelData.date,
+                time: pendingCancelData.time,
+                name: pendingCancelData.name,
+                email: pendingCancelData.email
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            closeModal();
+            if (data.success) {
+                markCardCancelled(pendingCancelData ? pendingCancelData.idx : null);
+                alert('예약이 취소되었습니다.\n입력하신 이메일로 취소 확인 메일이 발송됩니다.');
+            } else {
+                alert('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.');
+            }
+        })
+        .catch(() => {
+            closeModal();
+            alert('서버 연결에 실패했습니다.\n카카오톡 채널로 문의해 주세요.');
+        });
+    }
+
+    // 카드 UI를 취소 상태로 변경
+    function markCardCancelled(idx) {
+        if (idx === null) return;
+        const card = document.getElementById(`card-${idx}`);
+        if (!card) return;
+        card.classList.add('cancelled');
+        card.querySelector('.card-badge').className = 'card-badge cancelled';
+        card.querySelector('.card-badge').innerText = '취소됨';
+        document.getElementById(`footer-${idx}`).innerHTML =
+            '<div class="cancel-done-text">❌ 취소된 예약입니다</div>';
+    }
+
+    // 모달 배경 클릭 시 닫기
+    document.getElementById('cancel-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
 </script>
 </body>
 </html>
