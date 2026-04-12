@@ -68,6 +68,7 @@
         }
         .time-chip:hover { border-color: #bbb; background: #f9f9f9; }
         .time-chip.selected { background: #fee500; border-color: #fee500; font-weight: bold; color: #191919; }
+        .time-chip.past { color: #ccc; border-color: #eee; background: #fafafa; cursor: default; }
 
         /* 인원 선택 */
         .people-section { padding: 22px 18px; border-bottom: 8px solid #f8f8f8; display: none; }
@@ -520,7 +521,7 @@
                     d.classList.add('selected');
                     selectedDay = day;
                     resetTimeSelection();
-                    showTimeSection();
+                    showTimeSection(isToday); // 오늘이면 현재 시간 이후만 활성화
                 });
             }
             grid.appendChild(d);
@@ -550,22 +551,35 @@
         document.getElementById('submit-btn').disabled = true;
     }
 
-    // 시간 선택 영역 생성 & 표시
-    function showTimeSection() {
+    // 시간 선택 영역 생성 & 표시 (isToday: 오늘 날짜인 경우 현재 시간 이후만 활성화)
+    function showTimeSection(isToday = false) {
         const section = document.getElementById('time-section');
         const grid = document.getElementById('time-grid');
 
-        // 이미 칩이 있으면 새로 그리지 않음
-        if (grid.children.length === 0) {
-            const slots = [];
-            for (let h = 12; h <= 22; h++) {
-                slots.push(`${String(h).padStart(2,'0')}:00`);
-                if (h < 22) slots.push(`${String(h).padStart(2,'0')}:30`);
-            }
-            slots.forEach(time => {
-                const chip = document.createElement('button');
-                chip.className = 'time-chip';
-                chip.innerText = time;
+        // 날짜가 바뀔 때마다 새로 그려야 하므로 항상 초기화
+        grid.innerHTML = '';
+
+        const now = new Date();
+        const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+
+        const slots = [];
+        for (let h = 12; h <= 22; h++) {
+            slots.push(`${String(h).padStart(2,'0')}:00`);
+            if (h < 22) slots.push(`${String(h).padStart(2,'0')}:30`);
+        }
+
+        slots.forEach(time => {
+            const [hh, mm] = time.split(':').map(Number);
+            const slotMinutes = hh * 60 + mm;
+            // 오늘 선택 시 현재 시각 이하의 슬롯은 비활성
+            const isPastTime = isToday && slotMinutes <= currentTotalMinutes;
+
+            const chip = document.createElement('button');
+            chip.className = 'time-chip' + (isPastTime ? ' past' : '');
+            chip.innerText = time;
+            chip.disabled = isPastTime;
+
+            if (!isPastTime) {
                 chip.addEventListener('click', () => {
                     document.querySelectorAll('.time-chip').forEach(el => el.classList.remove('selected'));
                     chip.classList.add('selected');
@@ -574,9 +588,9 @@
                     resetPeopleSection();
                     showPeopleSection();
                 });
-                grid.appendChild(chip);
-            });
-        }
+            }
+            grid.appendChild(chip);
+        });
 
         section.style.display = 'block';
         setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
