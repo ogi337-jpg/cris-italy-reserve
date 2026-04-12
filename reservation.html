@@ -668,14 +668,15 @@
         btn.disabled = true;
         btn.innerText = '접수 중...';
 
+        // Content-Type을 text/plain으로 설정해야 no-cors에서 요청이 GAS에 실제로 전달됨
         fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(data)
         })
         .then(() => showSuccess(data))
-        .catch(() => showSuccess(data)); // no-cors는 항상 opaque response
+        .catch(() => showSuccess(data));
 
     }
 
