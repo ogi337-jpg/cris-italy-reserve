@@ -70,6 +70,35 @@
             margin-left: 10px;
         }
 
+        /* 예약 확인 배너 */
+        .check-banner {
+            margin: 0 16px 4px;
+            padding: 14px 18px;
+            background: #fff9cc;
+            border: 1.5px solid #fee500;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #191919;
+            transition: background 0.15s;
+        }
+        .check-banner:active { background: #fff3a0; }
+        .check-banner-left { display: flex; align-items: center; gap: 10px; }
+        .check-banner-icon { font-size: 22px; }
+        .check-banner-text { font-size: 14px; font-weight: bold; }
+        .check-banner-sub { font-size: 11px; color: #888; margin-top: 2px; }
+        .check-banner-arrow { color: #bbb; font-size: 20px; }
+
+        /* 섹션 라벨 */
+        .section-label {
+            padding: 18px 16px 8px;
+            font-size: 13px;
+            color: #aaa;
+            font-weight: bold;
+        }
+
         /* PC 화면 대응을 위한 미디어 쿼리 (선택 사항) */
         @media (min-width: 501px) {
             body { background-color: #e5e5e5; }
@@ -83,8 +112,21 @@
         <h1>방문하실 매장을 선택하세요</h1>
     </div>
 
-    <div class="store-list" id="store-list-container">
+    <!-- 예약 확인 배너 -->
+    <a href="check-reservation.html" class="check-banner">
+        <div class="check-banner-left">
+            <span class="check-banner-icon">📋</span>
+            <div>
+                <div class="check-banner-text">내 예약 확인하기</div>
+                <div class="check-banner-sub">연락처로 예약 내역을 조회하세요</div>
+            </div>
         </div>
+        <span class="check-banner-arrow">›</span>
+    </a>
+
+    <div class="section-label">예약할 매장을 선택하세요</div>
+    <div class="store-list" id="store-list-container">
+    </div>
 </div>
 
 <script>

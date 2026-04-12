@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>예약 확인</title>
+    <style>
+        body { margin: 0; background: #f2f2f2; font-family: -apple-system, sans-serif; color: #191919; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+
+        .header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 100;
+        }
+        .header-back { cursor: pointer; font-size: 24px; color: #191919; line-height: 1; }
+        .header-title { flex: 1; text-align: center; font-weight: bold; font-size: 16px; margin-right: 30px; }
+
+        /* 검색 영역 */
+        .search-section {
+            padding: 28px 20px 20px;
+            border-bottom: 8px solid #f8f8f8;
+        }
+        .search-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .search-desc {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+        .input-wrap {
+            display: flex;
+            gap: 10px;
+        }
+        .phone-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .phone-input:focus { border-color: #f0c000; box-shadow: 0 0 0 3px rgba(254,229,0,0.2); }
+        .btn-search {
+            background: #fee500;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
+        }
+        .btn-search:active { background: #f0d800; }
+        .btn-search:disabled { background: #f2f2f2; color: #ccc; cursor: default; }
+
+        /* 로딩 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+            color: #888;
+            font-size: 14px;
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid #eee;
+            border-top-color: #fee500;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 결과 없음 */
+        .no-result {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+        }
+        .no-result-icon { font-size: 48px; margin-bottom: 14px; }
+        .no-result-text { font-size: 14px; line-height: 1.7; }
+
+        /* 결과 목록 */
+        .result-section { display: none; padding: 20px 18px; }
+        .result-count {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .result-count b { color: #191919; }
+
+        /* 예약 카드 */
+        .reservation-card {
+            border: 1.5px solid #eee;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f2f2f2;
+        }
+        .card-store { font-size: 16px; font-weight: bold; }
+        .card-badge {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #fff7cc;
+            color: #b89400;
+        }
+        .card-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            margin-bottom: 9px;
+            font-size: 14px;
+        }
+        .card-row:last-child { margin-bottom: 0; }
+        .card-icon { font-size: 15px; flex-shrink: 0; width: 20px; }
+        .card-label { color: #aaa; font-size: 12px; flex-shrink: 0; width: 40px; margin-top: 1px; }
+        .card-value { color: #333; line-height: 1.4; flex: 1; }
+
+        @media (min-width: 501px) {
+            body { background-color: #e5e5e5; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <span class="header-back" onclick="history.back()">&#8249;</span>
+        <div class="header-title">예약 확인</div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-title">예약 조회</div>
+        <div class="search-desc">예약 시 입력하신 연락처를 입력하시면<br>예약 내역을 확인할 수 있습니다.</div>
+        <div class="input-wrap">
+            <input
+                type="tel"
+                class="phone-input"
+                id="phone-input"
+                placeholder="010-0000-0000"
+                onkeydown="if(event.key==='Enter') searchReservation()"
+            >
+            <button class="btn-search" id="btn-search" onclick="searchReservation()">조회</button>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        예약 내역을 불러오는 중...
+    </div>
+
+    <div class="no-result" id="no-result">
+        <div class="no-result-icon">🔍</div>
+        <div class="no-result-text">
+            해당 연락처로 등록된 예약이 없습니다.<br>
+            연락처를 다시 확인해 주세요.
+        </div>
+    </div>
+
+    <div class="result-section" id="result-section">
+        <div class="result-count" id="result-count"></div>
+        <div id="result-list"></div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrtrUS4bhp_p9hsEegXwrI68x7ZvShFDVF8eRK_bCanxp9s1dCCUcPwbOJP1A4YlKV/exec';
+
+    function searchReservation() {
+        const phoneRaw = document.getElementById('phone-input').value.trim();
+        const phone = phoneRaw.replace(/[^0-9]/g, '');
+
+        if (phone.length < 9) {
+            alert('올바른 연락처를 입력해 주세요.');
+            return;
+        }
+
+        // UI 상태 초기화
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('no-result').style.display = 'none';
+        document.getElementById('result-section').style.display = 'none';
+        document.getElementById('btn-search').disabled = true;
+
+        const url = `${SCRIPT_URL}?action=check&phone=${encodeURIComponent(phone)}`;
+
+        fetch(url, { redirect: 'follow' })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btn-search').disabled = false;
+
+                if (data.error) {
+                    alert('조회 중 오류가 발생했습니다: ' + data.error);
+                    return;
+                }
+
+                const results = data.results || [];
+                if (results.length === 0) {
+                    document.getElementById('no-result').style.display = 'block';
+                } else {
+                    showResults(results);
+                }
+            })
+            .catch(err => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btn-search').disabled = false;
+                alert('서버 연결에 실패했습니다.\n잠시 후 다시 시도해 주세요.');
+                console.error(err);
+            });
+    }
+
+    function showResults(results) {
+        const section = document.getElementById('result-section');
+        const list = document.getElementById('result-list');
+        const countEl = document.getElementById('result-count');
+
+        countEl.innerHTML = `총 <b>${results.length}건</b>의 예약이 확인되었습니다.`;
+        list.innerHTML = '';
+
+        results.forEach(r => {
+            const adult = r.adult || r['성인'] || 0;
+            const child = r.child || r['아동'] || 0;
+            const infant = r.infant || r['유아'] || 0;
+
+            const peopleStr = [
+                adult > 0 ? `성인 ${adult}명` : '',
+                child > 0 ? `아동 ${child}명` : '',
+                infant > 0 ? `유아 ${infant}명` : ''
+            ].filter(Boolean).join(' / ') || '-';
+
+            const card = document.createElement('div');
+            card.className = 'reservation-card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-store">${r.store || r['매장'] || '-'}</div>
+                    <div class="card-badge">접수완료</div>
+                </div>
+                <div class="card-row">
+                    <span class="card-icon">🎁</span>
+                    <span class="card-label">메뉴</span>
+                    <span class="card-value">${r.menu || r['메뉴'] || '-'}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-icon">📅</span>
+                    <span class="card-label">날짜</span>
+                    <span class="card-value">${r.date || r['날짜'] || '-'}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-icon">🕐</span>
+                    <span class="card-label">시간</span>
+                    <span class="card-value">${r.time || r['시간'] || '-'}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-icon">👤</span>
+                    <span class="card-label">인원</span>
+                    <span class="card-value">${peopleStr}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-icon">✏️</span>
+                    <span class="card-label">예약자</span>
+                    <span class="card-value">${r.name || r['예약자'] || '-'}</span>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+
+        section.style.display = 'block';
+    }
+</script>
+</body>
+</html>
