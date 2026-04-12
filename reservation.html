@@ -237,8 +237,8 @@
         <div class="contact-section" id="contact-section">
             <div class="section-title">✏️ 예약자 정보</div>
             <div class="input-row">
-                <label>영문 성함 <span class="input-required">*</span></label>
-                <input type="text" id="input-name" placeholder="e.g. HONG GILDONG" autocomplete="off"
+                <label>영문 성함 <span class="input-required">*</span> <span style="font-size:12px; color:#aaa; font-weight:normal;">(ex. HONG GILDONG)</span></label>
+                <input type="text" id="input-name" placeholder="HONG GILDONG" autocomplete="off"
                     oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '').toUpperCase()">
                 <small style="color:#aaa; font-size:11px; margin-top:5px; display:block;">영문 대문자로 자동 변환됩니다</small>
             </div>
@@ -247,7 +247,7 @@
                 <input type="tel" id="input-phone" placeholder="010-0000-0000">
             </div>
             <div class="input-row">
-                <label>이메일</label>
+                <label>이메일 <span style="font-size:12px; color:#888; font-weight:normal;">입력 시 예약확인 메일이 전송됩니다.</span></label>
                 <input type="email" id="input-email" placeholder="example@email.com">
             </div>
         </div>
