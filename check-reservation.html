@@ -371,28 +371,29 @@
         confirmBtn.disabled = true;
         confirmBtn.innerText = '취소 처리 중...';
 
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'cancel',
-                rowIndex: pendingCancelData.rowIndex,
-                phone: pendingCancelData.phone,
-                store: pendingCancelData.store,
-                date: pendingCancelData.date,
-                time: pendingCancelData.time,
-                name: pendingCancelData.name,
-                email: pendingCancelData.email
-            })
-        })
+        const savedIdx = pendingCancelData.idx;
+
+        // GAS POST는 CORS 리다이렉트 문제가 있으므로 GET 방식으로 전달
+        const params = new URLSearchParams({
+            action: 'cancel',
+            rowIndex: pendingCancelData.rowIndex,
+            phone: pendingCancelData.phone,
+            store: pendingCancelData.store,
+            date: pendingCancelData.date,
+            time: pendingCancelData.time,
+            name: pendingCancelData.name,
+            email: pendingCancelData.email
+        });
+
+        fetch(`${SCRIPT_URL}?${params.toString()}`, { redirect: 'follow' })
         .then(res => res.json())
         .then(data => {
             closeModal();
             if (data.success) {
-                markCardCancelled(pendingCancelData ? pendingCancelData.idx : null);
+                markCardCancelled(savedIdx);
                 alert('예약이 취소되었습니다.\n입력하신 이메일로 취소 확인 메일이 발송됩니다.');
             } else {
-                alert('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.');
+                alert('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.\n(' + (data.error || '') + ')');
             }
         })
         .catch(() => {
