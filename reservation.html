@@ -69,6 +69,8 @@
         .time-chip:hover { border-color: #bbb; background: #f9f9f9; }
         .time-chip.selected { background: #fee500; border-color: #fee500; font-weight: bold; color: #191919; }
         .time-chip.past { color: #ccc; border-color: #eee; background: #fafafa; cursor: default; }
+        .time-chip.discount30 { background: #fff3e0; border-color: #ff6b00; color: #ff6b00; font-weight: bold; }
+        .time-chip.discount30.selected { background: #ff6b00; border-color: #ff6b00; color: #fff; }
 
         /* 인원 선택 */
         .people-section { padding: 22px 18px; border-bottom: 8px solid #f8f8f8; display: none; }
@@ -203,6 +205,9 @@
 
         <div class="time-section" id="time-section">
             <div class="section-title">🕐 <span id="time-section-label">시간 선택</span></div>
+            <div id="discount30-notice" style="display:none; margin-bottom:14px; padding:10px 14px; background:#fff3e0; border-left:3px solid #ff6b00; border-radius:6px; font-size:13px; color:#cc4e00; line-height:1.5;">
+                🔥 <b>주황색</b> 시간대(15:30~17:30)는 <b>30% 할인</b>이 적용됩니다.
+            </div>
             <div class="time-grid" id="time-grid"></div>
         </div>
 
@@ -275,21 +280,25 @@
             name: '달오스떼 두오모점',
             img: '달오스떼.png',
             location: {
-                address: 'Piazza del Duomo, 50122 Firenze FI, 이탈리아',
-                hours: '매일 12:00 ~ 22:00\nLast order 21:30',
-                tel: '+39 055 000 0000',
+                address: 'Via dei cerchi 40/r, Firenze FI, 이탈리아',
+                hours: '12:00 ~ 23:00',
+                setHours: '12:00 ~ 18:00',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
+                discount30: '15:30 ~ 17:30',
+                tel: '-',
                 note: '피렌체 두오모 성당 인근 · 티본 스테이크 전문'
             },
             menus: [
                 {
-                    title: "옵션 1: ALL TIME 모든 메뉴 20% 할인",
+                    title: "옵션 1: ALL TIME 모든 메뉴 20~30% 할인",
                     img: "달오스떼_두오모_예약1.png",
-                    desc: "ALL TIME 모든 메뉴 20% 할인\n(테이블차지, 음료, 주류 제외)"
+                    desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "옵션 2: 12시~18시 한정 2인세트 (90유로)",
                     img: "달오스떼_두오모_예약2.png",
-                    desc: "1. 티본스테이크 1.2kg\n2. 매콤한 토마토 스파게티\n3. 사이드 선택 1\n4. 탄산 or 와인 중 택2\n5. 물"
+                    desc: "1. 티본스테이크 1.2kg\n2. 매콤한 토마토 스파게티\n3. 사이드 선택 1\n4. 탄산 or 와인 중 택2\n5. 물",
+                    timeEnd: '18:00'
                 }
             ]
         },
@@ -297,37 +306,50 @@
             name: '달오스떼 역앞점',
             img: '달오스떼.png',
             location: {
-                address: 'Via degli Orti Oricellari 29, 50123 Firenze FI, 이탈리아',
-                hours: '매일 12:00 ~ 22:00\nLast order 21:30',
-                tel: '+39 055 000 0001',
+                address: 'Via degli Orti Oricellari, 29, 50123 Firenze FI, 이탈리아',
+                hours: '12:00 ~ 23:00',
+                setHours: '12:00 ~ 21:30',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
+                discount30: '15:30 ~ 17:30',
+                tel: '-',
                 note: '산타마리아 노벨라역 도보 3분 · 본점'
             },
             menus: [
                 {
-                    title: "옵션 1: ALL TIME 모든 메뉴 20% 할인",
+                    title: "옵션 1: ALL TIME 모든 메뉴 20~30% 할인",
                     img: "달오스떼_역앞점_예약1.png",
-                    desc: "ALL TIME 모든 메뉴 20% 할인\n(테이블차지, 음료, 주류 제외)"
+                    desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "옵션 2: 달오스떼 역앞점 2인 세트 (90유로)",
                     img: "달오스떼_역앞점_예약2.png",
-                    desc: "달오스떼 (산타마리아 노벨라역)\n주소: via degli orti oricellari.29 50123\n\n2인기준 90유로\n1. 티본스테이크 1.2KG\n2. 매콤한 토마토스파게티 OR 알리오올리오\n3. 사이드 선택1\n4. 루피노 끼안띠 와인 DOCG 375 or 음료\n5. 물"
+                    desc: "달오스떼 (산타마리아 노벨라역)\n주소: via degli orti oricellari.29 50123\n\n2인기준 90유로\n1. 티본스테이크 1.2KG\n2. 매콤한 토마토스파게티 OR 알리오올리오\n3. 사이드 선택1\n4. 루피노 끼안띠 와인 DOCG 375 or 음료\n5. 물",
+                    timeEnd: '21:30'
                 }
             ]
         },
         nuti: {
             name: '누띠 (Nuti)',
             img: '누띠.png',
-            location: { address: 'Firenze, 이탈리아', hours: '준비 중', tel: '-', note: '100년 전통의 레스토랑 · 현지인 맛집' },
+            location: {
+                address: 'Borgo S. Lorenzo, 22/24, 50123 Firenze FI, 이탈리아',
+                hours: '12:00 ~ 23:00',
+                setHours: '12:00 ~ 18:00',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
+                discount30: '15:30 ~ 17:30',
+                tel: '-',
+                note: '100년 전통의 레스토랑 · 현지인 맛집'
+            },
             menus: [
                 {
-                    title: "옵션 1: 20% 할인예약 (ALLDAY ALLTIME)",
+                    title: "옵션 1: 20~30% 할인예약 (ALLDAY ALLTIME)",
                     img: "누띠_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20% 할인\n(테이블차지, 음료, 주류 제외)"
+                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "옵션 2: 12시~18시 한정 2인 세트 (50유로)",
                     img: "누띠_예약2.png",
+                    timeEnd: '18:00',
                     desc: "NUTI 스페셜 크리스세트 메뉴\n핸드 메이드 생면 파스타 3종 + 음료 2종 + 물\n2인기준 50유로\n\n1. 토스카나 전통 피치면 매콤한 토마토 소스 파스타\n2. 리코타와 시금치를 넣어 만든 카펠라치(만두)\n    토스카나 전통 라구(고기) 소스 파스타\n3. 파마산 치즈통에 페투치니(노란색면)를 비벼\n    트러플을 갈아 올린 파스타\n4. 음료 선택 2개\n    탄산음료 또는 프로세코\n5. 물"
                 }
             ]
@@ -335,16 +357,25 @@
         paoli: {
             name: '파울리 (Paoli)',
             img: '파울리.png',
-            location: { address: 'Firenze, 이탈리아', hours: '준비 중', tel: '-', note: '중세풍 인테리어 · 품격 있는 식사' },
+            location: {
+                address: 'Via dei Tavolini, 12/R, 50122 Firenze FI, 이탈리아',
+                hours: '12:00 ~ 23:00',
+                setHours: '12:00 ~ 18:00',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
+                discount30: '15:30 ~ 17:30',
+                tel: '-',
+                note: '중세풍 인테리어 · 품격 있는 식사'
+            },
             menus: [
                 {
-                    title: "옵션 1: 20% 할인예약 (ALLDAY ALLTIME)",
+                    title: "옵션 1: 20~30% 할인예약 (ALLDAY ALLTIME)",
                     img: "파울리_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20% 할인\n(테이블차지, 음료, 주류 제외)"
+                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "옵션 2: 12시~18시 한정 2인 세트 (100유로)",
                     img: "파울리_예약2.png",
+                    timeEnd: '18:00',
                     desc: "PAOLI 스페셜 크리스 세트메뉴\n12시~18시 예약 한정 · 2인기준 100유로\n\n1. 티본스테이크 1.2kg\n    (토스카나 전통 끼아니나 품종)\n2. 매콤한 토마토 파스타\n3. 사이드 1종 선택\n4. 음료 2종 선택\n    탄산음료\n    프로세코 (스파클링 화이트와인)\n    레드와인 한 잔\n5. 물"
                 }
             ]
@@ -352,16 +383,25 @@
         golden_view: {
             name: '골든뷰 (Golden View)',
             img: '골든뷰.png',
-            location: { address: 'Firenze, 이탈리아', hours: '준비 중', tel: '-', note: '베키오 다리 전망 · 로맨틱 다이닝' },
+            location: {
+                address: "Via de' Bardi, 58/r, 50125 Firenze FI, 이탈리아",
+                hours: '12:00 ~ 23:00',
+                setHours: '12:00 ~ 18:00',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
+                discount30: '15:30 ~ 17:30',
+                tel: '-',
+                note: '베키오 다리 전망 · 로맨틱 다이닝'
+            },
             menus: [
                 {
-                    title: "옵션 1: 20% 할인예약 (종일)",
+                    title: "옵션 1: 20~30% 할인예약 (종일)",
                     img: "골든뷰_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20% 할인\n(테이블차지, 음료, 주류 제외)"
+                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "옵션 2: LUNCH SET · 12시~17시30분 (70유로)",
                     img: "골든뷰_예약2.png",
+                    timeEnd: '18:00',
                     desc: "LUNCH SET (12시~17:30 마지막 예약)\n2인기준 70유로 · 정상가 대비 32% 할인\n\n1. 랍스터 파스타\n2. 오늘의 생선 스테이크\n3. 음료 2종 선택\n    화이트와인 또는 탄산음료\n4. 물"
                 },
                 {
@@ -399,12 +439,15 @@
         if (loc) {
             const rows = [
                 { icon: '📍', label: '주소', value: loc.address },
-                { icon: '🕐', label: '영업시간', value: loc.hours },
-                { icon: '📞', label: '전화번호', value: loc.tel },
-                { icon: '💬', label: '소개', value: loc.note }
+                { icon: '🕰️', label: '영업시간', value: loc.hours },
+                { icon: '💰', label: '20% 할인시간', value: loc.discount20 },
+                { icon: '🔥', label: '30% 할인시간', value: loc.discount30 },
+                { icon: '🎫', label: '세트예약 가능시간', value: loc.setHours },
+                { icon: 'ℹ️', label: '소개', value: loc.note }
             ];
             const locContainer = document.getElementById('location-container');
             rows.forEach(row => {
+                if (!row.value) return;
                 locContainer.innerHTML += `
                     <div class="location-row">
                         <div class="location-icon">${row.icon}</div>
@@ -433,14 +476,16 @@
                     <button class="btn-select-menu">예약하기</button>
                 </div>`;
             card.querySelector('.btn-select-menu').addEventListener('click', () => {
-                startBooking(m.title, m.img, m.desc);
+                startBooking(m.title, m.img, m.desc, m.timeEnd || null);
             });
             container.appendChild(card);
         });
     };
 
-    function startBooking(title, img, desc) {
+    function startBooking(title, img, desc, timeEnd) {
         selectedMenuTitle = title;
+        selectedMenuIsOption1 = title.startsWith('옵션 1');
+        selectedMenuTimeEnd = timeEnd || null;
         document.getElementById('menu-view').style.display = 'none';
         document.getElementById('step-view').style.display = 'block';
         document.getElementById('footer-bar').style.display = 'block';
@@ -544,7 +589,7 @@
     // 시간 선택 초기화
     function resetTimeSelection() {
         document.querySelectorAll('.time-chip').forEach(el => el.classList.remove('selected'));
-        document.getElementById('time-section-label').innerText = '시간 선택';
+        selectedTime = '';
         // 인원 섹션도 함께 숨김
         resetPeopleSection();
         document.getElementById('people-section').style.display = 'none';
@@ -558,6 +603,7 @@
 
         // 날짜가 바뀔 때마다 새로 그려야 하므로 항상 초기화
         grid.innerHTML = '';
+        document.getElementById('discount30-notice').style.display = selectedMenuIsOption1 ? 'block' : 'none';
 
         const now = new Date();
         const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
@@ -573,17 +619,26 @@
             const slotMinutes = hh * 60 + mm;
             // 오늘 선택 시 현재 시각 이하의 슬롯은 비활성
             const isPastTime = isToday && slotMinutes <= currentTotalMinutes;
+            const menuEndMinutes = selectedMenuTimeEnd
+                ? (parseInt(selectedMenuTimeEnd) * 60 + parseInt(selectedMenuTimeEnd.split(':')[1]))
+                : 22 * 60;
+            const isAfterLimit = slotMinutes > menuEndMinutes;
+            const isDiscount30 = selectedMenuIsOption1
+                && slotMinutes >= 15 * 60 + 30
+                && slotMinutes <= 17 * 60 + 30;
 
             const chip = document.createElement('button');
-            chip.className = 'time-chip' + (isPastTime ? ' past' : '');
+            chip.className = 'time-chip'
+                + (isPastTime || isAfterLimit ? ' past' : '')
+                + (isDiscount30 && !isPastTime && !isAfterLimit ? ' discount30' : '');
             chip.innerText = time;
-            chip.disabled = isPastTime;
+            chip.disabled = isPastTime || isAfterLimit;
 
             if (!isPastTime) {
                 chip.addEventListener('click', () => {
                     document.querySelectorAll('.time-chip').forEach(el => el.classList.remove('selected'));
                     chip.classList.add('selected');
-                    document.getElementById('time-section-label').innerText = time;
+                    selectedTime = time;
                     // 시간 선택 시 인원 섹션 열기
                     resetPeopleSection();
                     showPeopleSection();
@@ -600,6 +655,9 @@
     const counts = { adult: 0, child: 0, infant: 0 };
     let selectedDay = null;
     let selectedMenuTitle = '';
+    let selectedMenuIsOption1 = false;
+    let selectedMenuTimeEnd = null; // null = 제한 없음 (22:00까지)
+    let selectedTime = '';
 
     function resetPeopleSection() {
         counts.adult = 0; counts.child = 0; counts.infant = 0;
@@ -649,7 +707,7 @@
         if (!phone) { alert('연락처를 입력해 주세요.'); document.getElementById('input-phone').focus(); return; }
 
         const dateStr = selectedDay ? `${calYear}년 ${calMonth + 1}월 ${selectedDay}일` : '-';
-        const timeStr = document.getElementById('time-section-label').innerText;
+        const timeStr = selectedTime;
 
         const data = {
             store: store.name,
