@@ -51,6 +51,8 @@
         .cal-date.today { border: 2px solid #ff6b00; color: #ff6b00; font-weight: bold; }
         .cal-date.today.selected { background: #fee500; border-color: #fee500; color: #191919; }
         .cal-date.past { color: #ccc !important; cursor: default; background: #fafafa; border-color: transparent; }
+        .cal-date.blocked { background: #fff0f0; color: #ffb3b3 !important; border-color: transparent; position: relative; }
+        .cal-date.blocked::after { content: ''; position: absolute; top: 50%; left: 50%; width: 60%; height: 1px; background: #ffb3b3; transform: translate(-50%, -50%) rotate(-45deg); }
         .cal-date.empty { border: none; cursor: default; }
 
         /* 시간 선택 */
@@ -544,6 +546,15 @@
             grid.appendChild(empty);
         }
 
+        // 예약 불가 날짜 (월은 0-indexed: 11=12월, 0=1월)
+        const blockedDates = [
+            { month: 11, day: 24 },
+            { month: 11, day: 25 },
+            { month: 11, day: 31 },
+            { month: 0,  day: 1  }
+        ];
+        const isBlocked = (m, d) => blockedDates.some(b => b.month === m && b.day === d);
+
         // 날짜 채우기
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
         for (let day = 1; day <= daysInMonth; day++) {
@@ -551,17 +562,20 @@
             const dayOfWeek = cellDate.getDay(); // 0=일, 6=토
             const isPast = cellDate < today;
             const isToday = cellDate.getTime() === today.getTime();
+            const isBlockedDate = isBlocked(calMonth, day);
 
             const d = document.createElement('div');
             let cls = 'cal-date';
             if (dayOfWeek === 0) cls += ' sun';
             if (dayOfWeek === 6) cls += ' sat';
             if (isToday) cls += ' today';
-            if (isPast) cls += ' past';
+            if (isPast || isBlockedDate) cls += ' past';
+            if (isBlockedDate) cls += ' blocked';
             d.className = cls;
             d.innerText = day;
+            if (isBlockedDate) d.title = '예약 불가 날짜';
 
-            if (!isPast) {
+            if (!isPast && !isBlockedDate) {
                 d.addEventListener('click', () => {
                     document.querySelectorAll('.cal-date').forEach(el => el.classList.remove('selected'));
                     d.classList.add('selected');
