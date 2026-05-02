@@ -555,12 +555,17 @@
         ];
         const isBlocked = (m, d) => blockedDates.some(b => b.month === m && b.day === d);
 
+        // 예약 가능 마지막 날 (오늘 포함 7일)
+        const maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 6);
+
         // 날짜 채우기
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(calYear, calMonth, day);
             const dayOfWeek = cellDate.getDay(); // 0=일, 6=토
             const isPast = cellDate < today;
+            const isBeyond = cellDate > maxDate;
             const isToday = cellDate.getTime() === today.getTime();
             const isBlockedDate = isBlocked(calMonth, day);
 
@@ -569,13 +574,13 @@
             if (dayOfWeek === 0) cls += ' sun';
             if (dayOfWeek === 6) cls += ' sat';
             if (isToday) cls += ' today';
-            if (isPast || isBlockedDate) cls += ' past';
+            if (isPast || isBeyond || isBlockedDate) cls += ' past';
             if (isBlockedDate) cls += ' blocked';
             d.className = cls;
             d.innerText = day;
             if (isBlockedDate) d.title = '예약 불가 날짜';
 
-            if (!isPast && !isBlockedDate) {
+            if (!isPast && !isBeyond && !isBlockedDate) {
                 d.addEventListener('click', () => {
                     document.querySelectorAll('.cal-date').forEach(el => el.classList.remove('selected'));
                     d.classList.add('selected');
