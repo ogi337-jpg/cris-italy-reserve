@@ -784,24 +784,25 @@
         const timeStr = selectedTime;
 
         // 메뉴별 시트 저장값 결정
-        let menuLabel;
+        // 관리용 분류 코드 결정
+        let menuCode;
         if (selectedMenuTitle.includes('모든 메뉴 20~30% 할인 (ALL TIME)') && timeStr && timeStr !== '-') {
-            // ALL TIME 할인 메뉴: 시간대에 따라 20% / 30%
             const [h, m] = timeStr.split(':').map(Number);
             const t = h * 60 + m;
             const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
-            menuLabel = is30 ? '30%' : '20%';
+            menuCode = is30 ? '30할인' : '20할인';
         } else if (selectedMenuTitle.includes('런치 세트')) {
-            menuLabel = 'cris lunch';
+            menuCode = 'cris lunch';
         } else if (selectedMenuTitle.includes('스페셜 세트')) {
-            menuLabel = 'cris special';
+            menuCode = 'cris special';
         } else {
-            menuLabel = 'cris menu';
+            menuCode = 'cris menu';
         }
 
         const data = {
             store: store.name,
-            menu: menuLabel,
+            menu: menuCode,
+            menuDetail: selectedMenuTitle,
             date: dateStr,
             time: timeStr,
             adult: counts.adult,
@@ -831,7 +832,7 @@
     function showSuccess(data) {
         document.getElementById('success-summary').innerHTML = `
             <b>매장</b>: ${data.store}<br>
-            <b>메뉴</b>: ${data.menu}<br>
+            <b>메뉴</b>: ${data.menuDetail}<br>
             <b>날짜</b>: ${data.date}<br>
             <b>시간</b>: ${data.time}<br>
             <b>인원</b>: 성인 ${data.adult}명 / 아동 ${data.child}명 / 유아 ${data.infant}명<br>
