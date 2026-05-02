@@ -152,6 +152,14 @@
         .footer { position: fixed; bottom: 0; width: 100%; max-width: 500px; padding: 16px; background: #fff; border-top: 1px solid #eee; box-sizing: border-box; z-index: 100; left: 50%; transform: translateX(-50%); }
         .btn-submit { width: 100%; background: #fee500; border: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
         .btn-submit:disabled { background: #f2f2f2; color: #ccc; }
+
+        /* 공지 팝업 */
+        .notice-modal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; }
+        .notice-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
+        .notice-box { position: relative; background: #fff; border-radius: 18px; padding: 30px 24px 24px; max-width: 320px; width: 88%; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+        .notice-title { font-size: 17px; font-weight: bold; margin-bottom: 14px; }
+        .notice-content { font-size: 14px; color: #444; line-height: 1.8; white-space: pre-line; margin-bottom: 24px; text-align: left; }
+        .notice-close-btn { background: #fee500; border: none; padding: 13px 0; width: 100%; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -265,6 +273,16 @@
     </div>
 </div>
 
+<!-- 공지 팝업 -->
+<div class="notice-modal" id="notice-modal" style="display:none;">
+    <div class="notice-backdrop" onclick="closeNotice()"></div>
+    <div class="notice-box">
+        <div class="notice-title">📢 공지사항</div>
+        <div class="notice-content" id="notice-content"></div>
+        <button class="notice-close-btn" onclick="closeNotice()">확인</button>
+    </div>
+</div>
+
 <!-- 예약 완료 성공 화면 -->
 <div class="success-overlay" id="success-overlay">
     <div class="success-icon">✅</div>
@@ -276,6 +294,29 @@
 </div>
 
 <script>
+    // 서버 설정 (관리자 페이지에서 변경)
+    let serverSettings = { blocked_dates: {}, booking_days: 7, notice_enabled: false, notice_text: '' };
+
+    function fetchSettings() {
+        fetch(SCRIPT_URL)
+            .then(r => r.json())
+            .then(data => {
+                serverSettings.booking_days   = parseInt(data.booking_days) || 7;
+                serverSettings.blocked_dates  = JSON.parse(data.blocked_dates || '{}');
+                serverSettings.notice_enabled = data.notice_enabled === 'true';
+                serverSettings.notice_text    = data.notice_text || '';
+                if (serverSettings.notice_enabled && serverSettings.notice_text) {
+                    document.getElementById('notice-content').innerText = serverSettings.notice_text;
+                    document.getElementById('notice-modal').style.display = 'flex';
+                }
+            })
+            .catch(() => {}); // 실패 시 기본값 유지
+    }
+
+    function closeNotice() {
+        document.getElementById('notice-modal').style.display = 'none';
+    }
+
     // 매장별 데이터 정의
     const storeData = {
         dal_duomo: {
@@ -432,6 +473,8 @@
     }
 
     window.onload = () => {
+        fetchSettings(); // 관리자 설정 불러오기
+
         // 헤더 타이틀 + 매장 정보 세팅
         document.getElementById('nav-title').innerText = store.name;
         document.getElementById('store-name-title').innerText = store.name;
@@ -546,18 +589,30 @@
             grid.appendChild(empty);
         }
 
-        // 예약 불가 날짜 (월은 0-indexed: 11=12월, 0=1월)
+        // 예약 불가 날짜 — 하드코딩 기본값 (공휴일 등)
         const blockedDates = [
             { month: 11, day: 24 },
             { month: 11, day: 25 },
             { month: 11, day: 31 },
             { month: 0,  day: 1  }
         ];
-        const isBlocked = (m, d) => blockedDates.some(b => b.month === m && b.day === d);
+        const isHardBlocked = (m, d) => blockedDates.some(b => b.month === m && b.day === d);
 
-        // 예약 가능 마지막 날 (오늘 포함 7일)
+        // 서버에서 받은 예약 불가 날짜 (전체 공통 + 해당 식당)
+        const serverBlocked = new Set([
+            ...(serverSettings.blocked_dates['all'] || []),
+            ...(serverSettings.blocked_dates[storeId] || [])
+        ]);
+        const isServerBlocked = (y, m, d) => {
+            const s = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            return serverBlocked.has(s);
+        };
+        const isBlocked = (m, d) => isHardBlocked(m, d) || isServerBlocked(calYear, m, d);
+
+        // 예약 가능 마지막 날 (서버 설정 기준, 기본 7일)
+        const bookingDays = serverSettings.booking_days || 7;
         const maxDate = new Date(today);
-        maxDate.setDate(today.getDate() + 6);
+        maxDate.setDate(today.getDate() + (bookingDays - 1));
 
         // 날짜 채우기
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
