@@ -784,9 +784,18 @@
         const dateStr = selectedDay ? `${calYear}년 ${calMonth + 1}월 ${selectedDay}일` : '-';
         const timeStr = selectedTime;
 
+        // 20~30% 할인 메뉴일 경우 시간대에 따라 할인율 기입
+        let menuLabel = selectedMenuTitle;
+        if (selectedMenuIsOption1 && timeStr && timeStr !== '-') {
+            const [h, m] = timeStr.split(':').map(Number);
+            const t = h * 60 + m;
+            const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
+            menuLabel = selectedMenuTitle + (is30 ? ' [30%]' : ' [20%]');
+        }
+
         const data = {
             store: store.name,
-            menu: selectedMenuTitle,
+            menu: menuLabel,
             date: dateStr,
             time: timeStr,
             adult: counts.adult,
