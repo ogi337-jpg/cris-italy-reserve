@@ -146,10 +146,7 @@
         .location-label { font-size: 12px; color: #aaa; margin-bottom: 4px; }
         .location-value { font-size: 14px; color: #333; line-height: 1.5; }
 
-        /* 후기 탭 */
-        .review-empty { padding: 60px 20px; text-align: center; color: #bbb; font-size: 14px; }
-
-        .footer { position: fixed; bottom: 0; width: 100%; max-width: 500px; padding: 16px; background: #fff; border-top: 1px solid #eee; box-sizing: border-box; z-index: 100; left: 50%; transform: translateX(-50%); }
+.footer { position: fixed; bottom: 0; width: 100%; max-width: 500px; padding: 16px; background: #fff; border-top: 1px solid #eee; box-sizing: border-box; z-index: 100; left: 50%; transform: translateX(-50%); }
         .btn-submit { width: 100%; background: #fee500; border: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
         .btn-submit:disabled { background: #f2f2f2; color: #ccc; }
 
@@ -177,7 +174,6 @@
         <div class="tab-bar">
             <button class="tab-btn active" onclick="switchTab('reserve')">예약</button>
             <button class="tab-btn" onclick="switchTab('location')">장소정보</button>
-            <button class="tab-btn" onclick="switchTab('review')">후기</button>
         </div>
 
         <!-- 예약 탭 -->
@@ -193,10 +189,6 @@
             <div class="location-section" id="location-container"></div>
         </div>
 
-        <!-- 후기 탭 -->
-        <div class="tab-panel" id="tab-review">
-            <div class="review-empty">아직 등록된 후기가 없습니다.</div>
-        </div>
     </div>
 
     <div id="step-view" style="display:none;">
@@ -337,12 +329,12 @@
             },
             menus: [
                 {
-                    title: "ALL TIME 모든 메뉴 20~30% 할인",
+                    title: "모든 메뉴 20~30% 할인 (ALL TIME)",
                     img: "달오스떼_두오모_예약1.png",
                     desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
-                    title: "12시~18시 한정 2인세트 (90유로)",
+                    title: "Cris 2인세트 (90유로, 12시~18시 한정)",
                     img: "달오스떼_두오모_예약2.png",
                     desc: "1. 티본스테이크 1.2kg\n2. 매콤한 토마토 스파게티\n3. 사이드 선택 1\n4. 탄산 or 와인 중 택2\n5. 물",
                     timeEnd: '18:00'
@@ -363,7 +355,7 @@
             },
             menus: [
                 {
-                    title: "ALL TIME 모든 메뉴 20~30% 할인",
+                    title: "모든 메뉴 20~30% 할인 (ALL TIME)",
                     img: "달오스떼_역앞점_예약1.png",
                     desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
@@ -389,9 +381,9 @@
             },
             menus: [
                 {
-                    title: "20~30% 할인예약 (ALLDAY ALLTIME)",
+                    title: "모든 메뉴 20~30% 할인 (ALL TIME)",
                     img: "누띠_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
+                    desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "12시~18시 한정 2인 세트 (50유로)",
@@ -415,9 +407,9 @@
             },
             menus: [
                 {
-                    title: "20~30% 할인예약 (ALLDAY ALLTIME)",
+                    title: "모든 메뉴 20~30% 할인 (ALL TIME)",
                     img: "파울리_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
+                    desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "12시~18시 한정 2인 세트 (100유로)",
@@ -441,9 +433,9 @@
             },
             menus: [
                 {
-                    title: "20~30% 할인예약 (종일)",
+                    title: "모든 메뉴 20~30% 할인 (ALL TIME)",
                     img: "골든뷰_예약1.png",
-                    desc: "ALL DAY ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
+                    desc: "ALL TIME 모든 메뉴 20~30% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:00\n30% 할인시간: 15:30 ~ 17:30"
                 },
                 {
                     title: "LUNCH SET · 12시~17시30분 (70유로)",
