@@ -786,8 +786,8 @@
 
         // 메뉴별 시트 저장값 결정
         let menuLabel;
-        if (selectedMenuIsOption1 && timeStr && timeStr !== '-') {
-            // 20~30% 할인 메뉴: 시간대에 따라 할인율
+        if (selectedMenuTitle.includes('모든 메뉴 20~30% 할인 (ALL TIME)') && timeStr && timeStr !== '-') {
+            // ALL TIME 할인 메뉴: 시간대에 따라 20% / 30%
             const [h, m] = timeStr.split(':').map(Number);
             const t = h * 60 + m;
             const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
