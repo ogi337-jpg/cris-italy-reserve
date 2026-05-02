@@ -790,7 +790,7 @@
             const [h, m] = timeStr.split(':').map(Number);
             const t = h * 60 + m;
             const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
-            menuLabel = selectedMenuTitle + (is30 ? ' [30%]' : ' [20%]');
+            menuLabel = is30 ? '30%' : '20%';
         }
 
         const data = {
