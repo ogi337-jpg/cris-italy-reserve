@@ -309,6 +309,10 @@
                     document.getElementById('notice-content').innerText = serverSettings.notice_text;
                     document.getElementById('notice-modal').style.display = 'flex';
                 }
+                // 설정 로드 완료 후 캘린더가 이미 열려있으면 다시 렌더링
+                if (document.getElementById('step-view').style.display === 'block') {
+                    renderCalendar();
+                }
             })
             .catch(() => {}); // 실패 시 기본값 유지
     }
