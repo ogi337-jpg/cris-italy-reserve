@@ -526,7 +526,7 @@
 
     function startBooking(title, img, desc, timeEnd) {
         selectedMenuTitle = title;
-        selectedMenuIsOption1 = title.startsWith('옵션 1');
+        selectedMenuIsOption1 = title.includes('20~30%');
         selectedMenuTimeEnd = timeEnd || null;
         document.getElementById('menu-view').style.display = 'none';
         document.getElementById('step-view').style.display = 'block';
