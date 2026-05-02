@@ -790,7 +790,7 @@
             const [h, m] = timeStr.split(':').map(Number);
             const t = h * 60 + m;
             const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
-            menuCode = is30 ? '30할인' : '20할인';
+            menuCode = is30 ? '30%' : '20%';
         } else if (selectedMenuTitle.includes('런치 세트')) {
             menuCode = 'cris lunch';
         } else if (selectedMenuTitle.includes('스페셜 세트')) {
