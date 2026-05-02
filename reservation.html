@@ -799,10 +799,14 @@
             menuCode = 'cris menu';
         }
 
+        const menuDetail = menuCode === '20%' || menuCode === '30%'
+            ? `${selectedMenuTitle} - ${menuCode}`
+            : selectedMenuTitle;
+
         const data = {
             store: store.name,
             menu: menuCode,
-            menuDetail: selectedMenuTitle,
+            menuDetail: menuDetail,
             date: dateStr,
             time: timeStr,
             adult: counts.adult,
