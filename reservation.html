@@ -552,10 +552,12 @@
     let calMonth = today.getMonth(); // 0-indexed
 
     function changeMonth(delta) {
-        const minYear = today.getFullYear();
-        const minMonth = today.getMonth();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        const minYear = tomorrow.getFullYear();
+        const minMonth = tomorrow.getMonth();
         const next = new Date(calYear, calMonth + delta, 1);
-        // 현재 달보다 이전으로는 이동 불가
+        // 내일이 속한 달보다 이전으로는 이동 불가
         if (next.getFullYear() < minYear || (next.getFullYear() === minYear && next.getMonth() < minMonth)) return;
         calYear = next.getFullYear();
         calMonth = next.getMonth();
@@ -613,17 +615,19 @@
         };
         const isBlocked = (m, d) => isHardBlocked(m, d) || isServerBlocked(calYear, m, d);
 
-        // 예약 가능 마지막 날 (서버 설정 기준, 기본 7일)
+        // 예약 가능 기간: 내일부터 최대 7일
         const bookingDays = serverSettings.booking_days || 7;
-        const maxDate = new Date(today);
-        maxDate.setDate(today.getDate() + (bookingDays - 1));
+        const minDate = new Date(today);
+        minDate.setDate(today.getDate() + 1);
+        const maxDate = new Date(minDate);
+        maxDate.setDate(minDate.getDate() + (bookingDays - 1));
 
         // 날짜 채우기
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(calYear, calMonth, day);
             const dayOfWeek = cellDate.getDay(); // 0=일, 6=토
-            const isPast = cellDate < today;
+            const isPast = cellDate < minDate;
             const isBeyond = cellDate > maxDate;
             const isToday = cellDate.getTime() === today.getTime();
             const isBlockedDate = isBlocked(calMonth, day);
