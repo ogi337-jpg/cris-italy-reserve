@@ -775,7 +775,8 @@
         if (!/^[a-zA-Z\s]+$/.test(name)) { alert('성함은 영문으로만 입력해 주세요.'); document.getElementById('input-name').focus(); return; }
         if (!phone) { alert('연락처를 입력해 주세요.'); document.getElementById('input-phone').focus(); return; }
 
-        const dateStr = selectedDay ? `${calYear}년 ${calMonth + 1}월 ${selectedDay}일` : '-';
+        const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const dateStr = selectedDay ? `${MONTHS[calMonth]} ${selectedDay}, ${calYear}` : '-';
         const timeStr = selectedTime;
 
         // 메뉴별 시트 저장값 결정
