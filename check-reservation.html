@@ -391,7 +391,7 @@
             closeModal();
             if (data.success) {
                 markCardCancelled(savedIdx);
-                alert('예약이 취소되었습니다.\n입력하신 이메일로 취소 확인 메일이 발송됩니다.');
+                alert('예약이 취소되었습니다.');
             } else {
                 alert('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.\n(' + (data.error || '') + ')');
             }
