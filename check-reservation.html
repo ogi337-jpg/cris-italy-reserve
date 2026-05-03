@@ -152,9 +152,31 @@
         .btn-modal-confirm:disabled { background: #f2f2f2; color: #ccc; cursor: default; }
 
         @media (min-width: 501px) { body { background-color: #e5e5e5; } }
+        /* 토스트 팝업 */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30,30,30,0.92);
+            color: #fff;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 9999;
+            max-width: 320px;
+            width: max-content;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
+<div id="toast" class="toast"></div>
 <div class="container">
     <div class="header">
         <span class="header-back" onclick="history.back()">&#8249;</span>
@@ -212,6 +234,15 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrtrUS4bhp_p9hsEegXwrI68x7ZvShFDVF8eRK_bCanxp9s1dCCUcPwbOJP1A4YlKV/exec';
 
+    let toastTimer = null;
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerHTML = msg.replace(/\n/g, '<br>');
+        t.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
     let pendingCancelData = null; // 취소 대기 중인 예약 정보
 
     function searchReservation() {
@@ -219,7 +250,7 @@
         const phone = phoneRaw.replace(/[^0-9]/g, '');
 
         if (phone.length < 9) {
-            alert('올바른 연락처를 입력해 주세요.');
+            showToast('올바른 연락처를 입력해 주세요.');
             return;
         }
 
@@ -237,7 +268,7 @@
                 document.getElementById('btn-search').disabled = false;
 
                 if (data.error) {
-                    alert('조회 중 오류가 발생했습니다: ' + data.error);
+                    showToast('조회 중 오류가 발생했습니다: ' + data.error);
                     return;
                 }
 
@@ -251,7 +282,7 @@
             .catch(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('btn-search').disabled = false;
-                alert('서버 연결에 실패했습니다.\n잠시 후 다시 시도해 주세요.');
+                showToast('서버 연결에 실패했습니다.\n잠시 후 다시 시도해 주세요.');
             });
     }
 
@@ -391,14 +422,14 @@
             closeModal();
             if (data.success) {
                 markCardCancelled(savedIdx);
-                alert('예약이 취소되었습니다.');
+                showToast('예약이 취소되었습니다.');
             } else {
-                alert('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.\n(' + (data.error || '') + ')');
+                showToast('취소 처리 중 오류가 발생했습니다.\n카카오톡 채널로 문의해 주세요.');
             }
         })
         .catch(() => {
             closeModal();
-            alert('서버 연결에 실패했습니다.\n카카오톡 채널로 문의해 주세요.');
+            showToast('서버 연결에 실패했습니다.\n카카오톡 채널로 문의해 주세요.');
         });
     }
 
