@@ -337,22 +337,22 @@
             ]
         },
         dal_station: {
-            name: '달오스떼 역앞3호점',
+            name: '달오스떼 3호점',
             img: '달오스떼.png',
             location: {
                 address: 'Via degli Orti Oricellari, 29, 50123 Firenze FI, 이탈리아',
-                hours: '12:00 ~ 23:00',
-                setHours: '12:00 ~ 21:30',
+                hours: '일~월 오후 12:00~22:30',
+                setHours: '12:00~21:30 (30분 단위)',
                 discount20: '12:00 ~ 15:00 / 18:00 ~ 22:00',
                 discount30: '15:30 ~ 17:30',
                 tel: '-',
-                note: '산타마리아 노벨라역 도보 2분 · 3호점'
+                note: '<strong>세계 최고 수준의 스테이크를 경험하는 곳, 달오스떼</strong>\n창립 이래 인증된 최고급 육류만을 엄선하여 직접 선별한 최상급 부위와 정교한 숙성 과정을 거쳐 완성도 높은 스테이크를 선사합니다.\n\n치아니나, 마르치아나, 앵거스, 루비아 갈레가, 와규, 고베 소고기까지 세계 각지의 프리미엄 품종을 한 자리에서 경험할 수 있습니다.\n\n각기 다른 품종과 부위가 지닌 깊은 풍미와 질감을 비교하며 즐기는 특별한 미식의 순간을 만나보세요.\n\n달오스떼의 스테이크는 단순한 요리가 아닌 최고의 맛을 완성하기 위한 하나의 경험입니다.\n\n오직 마리트에서 달오스떼의 세트메뉴를 맛보세요.'
             },
             menus: [
                 {
-                    title: "2인 세트 (90유로)",
+                    title: "세트 메뉴",
                     img: "달오스떼_역앞점_예약2.png",
-                    desc: "DALL'OSTE 스페셜 CRIS 세트 메뉴\n달오스떼 (산타마리아 노벨라역)\n\n2인기준 90유로\n1. 식전빵\n2. 티본스테이크 1.2kg\n3. 매콤한 토마토스파게티 또는 알리오올리오\n4. 사이드 1종 선택\n5. 루피노 끼안띠 와인 DOCG 375ml or 음료\n6. 물\n7. 테이블차지 포함",
+                    desc: "DALL'OSTE 스페셜 CRIS 세트 메뉴\n달오스떼 (산타마리아 노벨라역)\n\n<strong>* 2인기준 90유로</strong>\n1. 식전빵\n2. 티본스테이크 1.2KG\n3. 매콤한 토마토스파게티 OR 알리오올리오\n4. 사이드 선택1\n   ① Mixed Salad\n   ② Roasted Potatoes\n5. 루피노 끼안띠 와인 DOCG 375ml 1BTL or 음료 2BTL\n6. 물 1BTL\n7. 테이블차지 2인\n\n<strong>* 3인기준 135유로</strong>\n1. 식전빵\n2. 티본스테이크 1.5KG\n3. 파스타와 와인선택 (①②번 중 한가지 선택)\n   ①파스타 2종 와인 375ml 1BTL\n   ②파스타 1종과 와인 750ml 1BTL (매콤한 토마토파스타 또는 알리오올리오)\n4. 사이드 2종 모두\n   ① Mixed Salad\n   ② Roasted Potatoes\n5. 물 1BTL\n6. 테이블차지 3인",
                     timeEnd: '21:30'
                 },
                 {
@@ -474,12 +474,14 @@
         // 장소정보 탭 렌더링
         const loc = store.location;
         if (loc) {
+            const timeLines = [];
+            if (loc.hours)      timeLines.push('- 영업시간: ' + loc.hours);
+            if (loc.setHours)   timeLines.push('- 세트메뉴 예약가능시간: ' + loc.setHours);
+            if (loc.discount20) timeLines.push('- 20% 할인시간: ' + loc.discount20);
+            if (loc.discount30) timeLines.push('- 30% 할인시간: ' + loc.discount30);
             const rows = [
                 { icon: '📍', label: '주소', value: loc.address },
-                { icon: '🕰️', label: '영업시간', value: loc.hours },
-                { icon: '💰', label: '20% 할인시간', value: loc.discount20 },
-                { icon: '🔥', label: '30% 할인시간', value: loc.discount30 },
-                { icon: '🎫', label: '세트예약 가능시간', value: loc.setHours },
+                { icon: '⏰', label: '시간', value: timeLines.join('\n') || null },
                 { icon: 'ℹ️', label: '소개', value: loc.note }
             ];
             const locContainer = document.getElementById('location-container');
@@ -528,7 +530,7 @@
         document.getElementById('footer-bar').style.display = 'block';
         document.getElementById('step-menu-img').src = img;
         document.getElementById('selected-menu-name').innerText = title;
-        document.getElementById('selected-menu-desc').innerText = desc;
+        document.getElementById('selected-menu-desc').innerHTML = desc.replace(/\n/g, '<br>');
         initCalendar();
     }
 
