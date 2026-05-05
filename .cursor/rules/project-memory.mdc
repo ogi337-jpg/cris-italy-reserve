@@ -1,0 +1,44 @@
+---
+description: 피렌체 크리스 예약 사이트 프로젝트 현황 및 작업 메모리
+alwaysApply: true
+---
+
+# 피렌체 크리스 (Firenze Cris) 예약 사이트
+
+## 프로젝트 개요
+- GitHub Pages 배포: https://ogi337-jpg.github.io/cris-italy-reserve/
+- 커스텀 도메인 예정: https://firenzecris.com (구매 및 연결 작업 중)
+- 피렌체 맛집 예약 페이지 (이탈리아 현지 식당 예약 서비스)
+
+## 파일 구성
+- `index.html` : 메인 화면 (매장 선택 리스트)
+- `reservation.html` : 식당 상세 + 예약 페이지 (탭: 예약 / 장소정보 / 후기)
+- `check-reservation.html` : 예약 확인 / 취소 페이지
+
+## 매장 목록 (index.html 순서)
+1. 달오스떼 역앞점 (dal_station) - 산타마리아 노벨라역 도보 3분 | 본점
+2. 달오스떼 두오모점 (dal_duomo) - 피렌체 두오모 성당 인근 | 티본 스테이크 전문
+3. 누띠 Nuti (nuti) - 100년 전통의 레스토랑 | 현지인 맛집
+4. 파올리 Paoli (paoli) - 중세풍 인테리어 | 품격 있는 식사
+5. 골든뷰 Golden View (golden_view) - 베키오 다리 전망 | 로맨틱 다이닝
+
+## 장소정보 (reservation.html storeData[].location)
+| 매장 | 주소 | 영업/예약시간 |
+|------|------|--------------|
+| 달오스떼 역앞점 | Via degli Orti Oricellari, 29, 50123 Firenze FI | 영업 12:00~22:30 |
+| 달오스떼 두오모점 | Via dei Cerchi 40/r, Firenze FI | 예약 12:00~18:00 |
+| 누띠 | Borgo S. Lorenzo, 22/24, 50123 Firenze FI | 예약 12:00~18:00 |
+| 파올리 | Via dei Tavolini, 12/R, 50122 Firenze FI | 예약 12:00~18:00 |
+| 골든뷰 | Via de' Bardi, 58/r, 50125 Firenze FI | 런치 12:00~17:30 / 예약 12:00~18:00 |
+
+## 완료된 작업
+- [x] 달오스떼 역앞점을 메인 리스트 최상단으로 이동
+- [x] 파올리 이름 표기 수정 (파울리 → 파올리)
+- [x] 각 식당 장소정보(주소, 영업시간) 업데이트
+- [x] 메인 화면 소개 문구 원래대로 복원 (정확한 정보 확인 후)
+
+## 미완료 / 예정 작업
+- [ ] firenzecris.com 도메인 구매
+- [ ] GitHub Pages에 커스텀 도메인 연결 (CNAME, DNS A레코드 설정)
+- [ ] 각 식당 전화번호 확보 후 장소정보에 추가
+- [ ] 달오스떼 역앞점 할인 적용 시간대 확인 후 추가 (20%, 30% 할인시간 미정)
