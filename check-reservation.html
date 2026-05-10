@@ -249,6 +249,16 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzsj2Bpx3WRhuKTBaEgOI6hTGrdxoXIgmMr5JZ9fnSiWQal6nGx6wnAgc9pbW_TQcc/exec';
 
+    function getStoreAddress(storeName) {
+        const n = storeName || '';
+        if (n.includes('3호점') || n.includes('역앞')) return 'Via degli Orti Oricellari, 29, 50123 Firenze FI';
+        if (n.includes('두오모'))                      return 'Via dei Cerchi, 40/R, 50122 Firenze FI';
+        if (n.includes('누띠'))                        return 'Borgo S. Lorenzo, 22/24, 50123 Firenze FI';
+        if (n.includes('파올리'))                      return 'Via dei Tavolini, 12/R, 50122 Firenze FI';
+        if (n.includes('골든뷰'))                      return "Via de' Bardi, 58/r, 50125 Firenze FI";
+        return '';
+    }
+
     function showToast(msg) {
         document.getElementById('alert-msg').innerHTML = msg.replace(/\n/g, '<br>');
         document.getElementById('alert-overlay').classList.add('show');
@@ -330,6 +340,12 @@
                         ${isCancelled ? '취소됨' : '접수완료'}
                     </div>
                 </div>
+                ${getStoreAddress(r.store || r['매장']) ? `
+                <div class="card-row">
+                    <span class="card-icon">📍</span>
+                    <span class="card-label">주소</span>
+                    <span class="card-value" style="font-size:13px; color:#555;">${getStoreAddress(r.store || r['매장'])}</span>
+                </div>` : ''}
                 <div class="card-row">
                     <span class="card-icon">🎁</span>
                     <span class="card-label">메뉴</span>
