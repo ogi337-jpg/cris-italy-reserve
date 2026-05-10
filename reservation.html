@@ -19,7 +19,8 @@
         .store-info { padding: 22px 18px; border-bottom: 1px solid #f2f2f2; }
         .store-info h2 { margin: 0 0 4px; font-size: 21px; }
         .store-info-en { font-size: 13px; color: #aaa; font-weight: bold; letter-spacing: 0.3px; margin-bottom: 4px; }
-        .store-info-addr { font-size: 12px; color: #999; line-height: 1.5; }
+        .store-info-addr { font-size: 12px; color: #cc0000; line-height: 1.5; font-weight: bold; }
+        .store-info-addr-label { display: inline-block; font-size: 11px; color: #fff; background: #cc0000; border-radius: 4px; padding: 1px 6px; margin-bottom: 4px; font-weight: bold; }
 
         /* 메뉴 리스트 (삿뽀로 스타일) */
         .menu-list-section { padding: 18px; background-color: #f8f8f8; }
@@ -482,7 +483,10 @@
         document.getElementById('store-name-title').innerText = store.name;
         document.getElementById('main-img').src = store.img;
         if (store.englishName) document.getElementById('store-english-name').innerText = store.englishName;
-        if (store.location && store.location.address) document.getElementById('store-address').innerText = store.location.address;
+        if (store.location && store.location.address) {
+            document.getElementById('store-address').innerHTML =
+                '<span class="store-info-addr-label">📍 주소 확인 필수</span><br>' + store.location.address;
+        }
 
         // 장소정보 탭 렌더링
         const loc = store.location;
