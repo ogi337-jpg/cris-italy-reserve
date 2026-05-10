@@ -850,6 +850,7 @@
     function showSuccess(data) {
         document.getElementById('success-summary').innerHTML = `
             <b>매장</b>: ${data.store}<br>
+            <b>주소</b>: <span style="color:#cc0000; font-weight:bold;">${store.location && store.location.address ? store.location.address : ''}</span><br>
             <b>메뉴</b>: ${data.menuDetail}<br>
             <b>날짜</b>: ${data.date}<br>
             <b>시간</b>: ${data.time}<br>
