@@ -251,6 +251,7 @@
 
     function getStoreAddress(storeName) {
         const n = storeName || '';
+        if (n.includes('본점'))                         return 'Via Luigi Alamanni, 3/5r, 50100 Firenze FI';
         if (n.includes('3호점') || n.includes('역앞')) return 'Via degli Orti Oricellari, 29, 50123 Firenze FI';
         if (n.includes('두오모'))                      return 'Via dei Cerchi, 40/R, 50122 Firenze FI';
         if (n.includes('누띠'))                        return 'Borgo S. Lorenzo, 22/24, 50123 Firenze FI';

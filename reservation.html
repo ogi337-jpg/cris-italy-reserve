@@ -76,6 +76,8 @@
         .time-chip.past { color: #ccc; border-color: #eee; background: #fafafa; cursor: default; }
         .time-chip.discount30 { background: #fff3e0; border-color: #ff6b00; color: #ff6b00; font-weight: bold; }
         .time-chip.discount30.selected { background: #ff6b00; border-color: #ff6b00; color: #fff; }
+        .time-chip.discount50 { background: #ffe8e8; border-color: #cc0000; color: #cc0000; font-weight: bold; }
+        .time-chip.discount50.selected { background: #cc0000; border-color: #cc0000; color: #fff; }
 
         /* 인원 선택 */
         .people-section { padding: 22px 18px; border-bottom: 8px solid #f8f8f8; display: none; }
@@ -344,6 +346,31 @@
                 }
             ]
         },
+        dal_main: {
+            name: '달오스떼 본점',
+            englishName: 'Trattoria Dalloste SMN',
+            img: '달오스떼.png',
+            bookingStart: '11:00',
+            bookingEnd: '22:30',
+            discount50Times: ['11:00', '11:30', '16:30'],
+            discountNoticeText: '🔥 <b>주황색</b> 시간대(15:30~16:00, 17:00~17:30)는 <b>30% 할인</b>, <b style="color:#cc0000">빨간색</b> 시간대(11:00~11:30, 16:30)는 <b>50% 할인</b>이 적용됩니다.',
+            location: {
+                address: 'Via Luigi Alamanni, 3/5r, 50100 Firenze FI, 이탈리아',
+                hours: '일~월 11:00 ~ 23:00',
+                discount20: '12:00 ~ 15:00 / 18:00 ~ 22:30',
+                discount30: '15:30 ~ 16:00 / 17:00 ~ 17:30',
+                discount50: '11:00 ~ 11:30 / 16:30',
+                tel: '-',
+                note: '<strong>세계 최고 수준의 스테이크를 경험하는 곳, 달오스떼</strong>\n창립 이래 인증된 최고급 육류만을 엄선하여 직접 선별한 최상급 부위와 정교한 숙성 과정을 거쳐 완성도 높은 스테이크를 선사합니다.\n\n치아니나, 마르치아나, 앵거스, 루비아 갈레가, 와규, 고베 소고기까지 세계 각지의 프리미엄 품종을 한 자리에서 경험할 수 있습니다.\n\n각기 다른 품종과 부위가 지닌 깊은 풍미와 질감을 비교하며 즐기는 특별한 미식의 순간을 만나보세요.\n\n달오스떼의 스테이크는 단순한 요리가 아닌 최고의 맛을 완성하기 위한 하나의 경험입니다.'
+            },
+            menus: [
+                {
+                    title: "모든 메뉴 20~50% 할인 (ALL TIME)",
+                    img: "달오스떼_역앞점_모든메뉴.png",
+                    desc: "ALL TIME 모든 메뉴 20~50% 할인\n(테이블차지, 음료, 주류 제외)\n\n20% 할인시간: 12:00 ~ 15:00 / 18:00 ~ 22:30\n30% 할인시간: 15:30 ~ 16:00 / 17:00 ~ 17:30\n50% 할인시간: 11:00 ~ 11:30 / 16:30"
+                }
+            ]
+        },
         dal_station: {
             name: '달오스떼 3호점 (산타마리아노벨라 역앞)',
             englishName: 'TRATTORIA DALLOSTE',
@@ -495,6 +522,7 @@
             if (loc.setHours)   bookingLines.push(loc.setHours);
             if (loc.discount20) bookingLines.push('20% 할인시간: ' + loc.discount20);
             if (loc.discount30) bookingLines.push('30% 할인시간: ' + loc.discount30);
+            if (loc.discount50) bookingLines.push('50% 할인시간: ' + loc.discount50);
             const rows = [
                 { icon: '📍', label: '주소', value: loc.address },
                 { icon: '⏰', label: '영업시간', value: loc.hours },
@@ -540,7 +568,7 @@
 
     function startBooking(title, img, desc, timeEnd) {
         selectedMenuTitle = title;
-        selectedMenuIsOption1 = title.includes('20~30%');
+        selectedMenuIsOption1 = title.includes('20~30%') || title.includes('20~50%');
         selectedMenuTimeEnd = timeEnd || null;
         document.getElementById('menu-view').style.display = 'none';
         document.getElementById('step-view').style.display = 'block';
@@ -692,15 +720,28 @@
 
         // 날짜가 바뀔 때마다 새로 그려야 하므로 항상 초기화
         grid.innerHTML = '';
-        document.getElementById('discount30-notice').style.display = selectedMenuIsOption1 ? 'block' : 'none';
 
         const now = new Date();
         const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
 
+        const [bsH, bsM] = (store.bookingStart || '12:00').split(':').map(Number);
+        const [beH, beM] = (store.bookingEnd   || '22:00').split(':').map(Number);
+        const defaultEndMinutes = beH * 60 + beM;
+
         const slots = [];
-        for (let h = 12; h <= 22; h++) {
-            slots.push(`${String(h).padStart(2,'0')}:00`);
-            if (h < 22) slots.push(`${String(h).padStart(2,'0')}:30`);
+        let curH = bsH, curM = bsM;
+        while (curH * 60 + curM <= defaultEndMinutes) {
+            slots.push(`${String(curH).padStart(2,'0')}:${String(curM).padStart(2,'0')}`);
+            curM += 30;
+            if (curM >= 60) { curM -= 60; curH++; }
+        }
+
+        const noticeEl = document.getElementById('discount30-notice');
+        if (selectedMenuIsOption1) {
+            noticeEl.innerHTML = store.discountNoticeText || '🔥 <b>주황색</b> 시간대(15:30~17:30)는 <b>30% 할인</b>이 적용됩니다.';
+            noticeEl.style.display = 'block';
+        } else {
+            noticeEl.style.display = 'none';
         }
 
         slots.forEach(time => {
@@ -710,16 +751,22 @@
             const isPastTime = isToday && slotMinutes <= currentTotalMinutes;
             const menuEndMinutes = selectedMenuTimeEnd
                 ? (parseInt(selectedMenuTimeEnd) * 60 + parseInt(selectedMenuTimeEnd.split(':')[1]))
-                : 22 * 60;
+                : defaultEndMinutes;
             const isAfterLimit = slotMinutes > menuEndMinutes;
+            const isDiscount50 = selectedMenuIsOption1
+                && store.discount50Times && store.discount50Times.includes(time)
+                && !isPastTime && !isAfterLimit;
             const isDiscount30 = selectedMenuIsOption1
+                && !isDiscount50
                 && slotMinutes >= 15 * 60 + 30
-                && slotMinutes <= 17 * 60 + 30;
+                && slotMinutes <= 17 * 60 + 30
+                && !isPastTime && !isAfterLimit;
 
             const chip = document.createElement('button');
             chip.className = 'time-chip'
                 + (isPastTime || isAfterLimit ? ' past' : '')
-                + (isDiscount30 && !isPastTime && !isAfterLimit ? ' discount30' : '');
+                + (isDiscount50 ? ' discount50' : '')
+                + (isDiscount30 ? ' discount30' : '');
             chip.innerText = time;
             chip.disabled = isPastTime || isAfterLimit;
 
@@ -801,11 +848,14 @@
         // 메뉴별 시트 저장값 결정
         // 관리용 분류 코드 결정
         let menuCode;
-        if (selectedMenuTitle.includes('모든 메뉴 20~30% 할인 (ALL TIME)') && timeStr && timeStr !== '-') {
-            const [h, m] = timeStr.split(':').map(Number);
-            const t = h * 60 + m;
-            const is30 = t >= 15 * 60 + 30 && t <= 17 * 60 + 30;
-            menuCode = is30 ? '30%' : '20%';
+        if ((selectedMenuTitle.includes('모든 메뉴 20~30% 할인') || selectedMenuTitle.includes('모든 메뉴 20~50% 할인')) && timeStr && timeStr !== '-') {
+            if (store.discount50Times && store.discount50Times.includes(timeStr)) {
+                menuCode = '50%';
+            } else {
+                const [h, m] = timeStr.split(':').map(Number);
+                const t = h * 60 + m;
+                menuCode = (t >= 15 * 60 + 30 && t <= 17 * 60 + 30) ? '30%' : '20%';
+            }
         } else if (selectedMenuTitle.includes('런치 세트')) {
             menuCode = 'cris lunch';
         } else if (selectedMenuTitle.includes('스페셜 세트')) {
@@ -814,7 +864,7 @@
             menuCode = 'cris menu';
         }
 
-        const menuDetail = menuCode === '20%' || menuCode === '30%'
+        const menuDetail = ['20%', '30%', '50%'].includes(menuCode)
             ? `${selectedMenuTitle} - ${menuCode}`
             : selectedMenuTitle;
 
