@@ -32,6 +32,15 @@
             cursor: pointer; transition: background 0.15s;
         }
         .btn-reserve:active { background: #f0d800; }
+        .btn-download {
+            display: block; width: 100%; max-width: 320px;
+            background: #fff; border: 2px solid #ddd; border-radius: 14px;
+            padding: 14px; font-size: 15px; font-weight: bold;
+            color: #555; text-align: center; text-decoration: none;
+            cursor: pointer; transition: background 0.15s; margin-bottom: 10px;
+        }
+        .btn-download:active { background: #f5f5f5; }
+        .save-hint { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 28px; }
         @media (min-width: 501px) { body { background-color: #e5e5e5; } }
     </style>
 </head>
@@ -46,6 +55,8 @@
         제휴된 식당에서 시간대별로<br>
         할인 적용을 받으실 수 있습니다.
     </div>
+    <a href="crispass_qr.png" download="crispass_qr.png" class="btn-download">⬇ 이미지 저장</a>
+    <div class="save-hint">저장이 안 될 경우 이미지를 꾹 눌러서 저장하세요</div>
     <a href="restaurants.html" class="btn-reserve">예약 / 확인 / 취소</a>
 </div>
 </body>
