@@ -347,9 +347,10 @@
             ]
         },
         dal_main: {
-            name: '달오스떼 본점',
+            name: '달오스떼 SMN (역앞)',
+            storeCode: 'SMN',
             englishName: 'Trattoria Dalloste SMN',
-            img: '달오스떼.png',
+            img: '달오스떼_SMN (역앞).jpg',
             bookingStart: '11:00',
             bookingEnd: '22:30',
             discount50Times: ['11:00', '11:30', '16:30'],
@@ -372,9 +373,9 @@
             ]
         },
         dal_station: {
-            name: '달오스떼 3호점 (산타마리아노벨라 역앞)',
+            name: '달오스떼 3호점 (역앞)',
             englishName: 'TRATTORIA DALLOSTE',
-            img: '달오스떼.png',
+            img: '달오스떼 3호점 (역앞).jpg',
             location: {
                 address: 'Via degli Orti Oricellari, 29, 50123 Firenze FI, 이탈리아',
                 hours: '일~월 12:00 ~ 22:30',
@@ -902,6 +903,7 @@
 
         const data = {
             store: store.name,
+            storeCode: store.storeCode || '',
             menu: menuCode,
             menuDetail: menuDetail,
             date: dateStr,
