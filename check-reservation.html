@@ -339,7 +339,7 @@
                 <div class="card-header">
                     <div class="card-store">${r.store || r['매장'] || '-'}</div>
                     <div class="card-badge ${isCancelled ? 'cancelled' : 'active'}">
-                        ${isCancelled ? '취소됨' : '접수완료'}
+                        ${isCancelled ? '취소됨' : '예약확정'}
                     </div>
                 </div>
                 ${getStoreAddress(r.store || r['매장']) ? `
