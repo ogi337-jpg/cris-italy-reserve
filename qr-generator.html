@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>QR 코드 생성기</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f2f2f2; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; max-width: 420px; width: 90%; }
+        h2 { margin: 0 0 8px; font-size: 18px; }
+        .sub { font-size: 12px; color: #888; margin-bottom: 24px; word-break: break-all; }
+        .qr-img { width: 300px; height: 300px; border: 1px solid #eee; border-radius: 8px; display: block; margin: 0 auto; }
+        .hint { font-size: 12px; color: #aaa; margin-top: 16px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>달오스떼 본점</h2>
+    <div class="sub">https://travel.naver.com/overseas/8621019999/poi/review/naver</div>
+    <img class="qr-img"
+         src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://travel.naver.com/overseas/8621019999/poi/review/naver"
+         alt="QR 코드">
+    <div class="hint">이미지를 우클릭 → '다른 이름으로 저장'으로 PNG 저장</div>
+</div>
+</body>
+</html>
